@@ -32,9 +32,6 @@ MIDDLEWARE_CLASSES = [
 
 ROOT_URLCONF = 'mainsite.urls'
 
-SECRET_KEY = ''
-
-
 ##
 #
 #  Templates
@@ -48,7 +45,7 @@ TEMPLATE_LOADERS = [
 ]
 
 TEMPLATE_DIRS = [
-    os.path.join(TOP_DIR, 'breakdown', 'templates'),
+    os.path.join(TOP_DIR, 'templates'),
 ]
 
 TEMPLATE_CONTEXT_PROCESSORS = [
@@ -77,7 +74,7 @@ STATICFILES_FINDERS = [
 STATIC_ROOT = os.path.join(TOP_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(TOP_DIR, 'breakdown', 'static'),
+    os.path.join(TOP_DIR, 'static'),
 ]
 
 
