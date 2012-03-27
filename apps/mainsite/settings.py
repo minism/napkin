@@ -4,6 +4,9 @@ import os
 from mainsite import TOP_DIR
 
 
+DEBUG = False
+TEMPLATE_DEBUG = DEBUG
+
 ##
 #
 #  Important Stuff
