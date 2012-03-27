@@ -9,3 +9,7 @@ AppleDouble
 staticfiles/*
 mediafiles/*
 
+
+# Compiled media
+static/bootstrap
+
