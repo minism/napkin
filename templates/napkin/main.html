@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block styles %}
+  {{ super() }}
+
+  {% if debug %}
+    <link rel="stylesheet/less" type="text/css" href="{{STATIC_URL}}less/napkin.less">
+  {% else %}
+  {% endif %}
+{% endblock %}
+
+
+{% block content %}
+
+<div class="fullscreen pane-container">
+
+  <div id="pane1" class="pane-fixed">
+    <ul class="nav nav-list">
+      <li class="nav-header">
+        Collections
+      </li>
+
+      <li class="active">
+        <a href="#">Queue</a>
+      </li>
+
+      <li class="divider"></li>
+
+      <li>
+        <a href="#">Tag 1</a>
+      </li>
+      <li>
+        <a href="#">Tag 2</a>
+      </li>
+      <li>
+        <a href="#">Tag 3</a>
+      </li>
+
+      <li class="divider"></li>
+
+      <li>
+        <a href="#">Trash</a>
+      </li>
+    </ul>
+  </div>
+
+  <div id="pane2" class="pane-fixed">
+    <ul class="nav nav-list">
+      <li class="nav-header">
+        Notes
+      </li>
+
+      <li class="active">
+        <a href="#">{{ lipsum(html=False, n=1, min=2, max=6)}}</a>
+      </li>
+      {% for i in range(50) %}
+        <li>
+          <a href="#">{{ lipsum(html=False, n=1, min=2, max=4)}}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div id="pane3" class="pane-expand">
+    {{ lipsum(n=100) }}
+  </div>
+
+</div>
+
+{% endblock %}

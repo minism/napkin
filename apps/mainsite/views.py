@@ -17,6 +17,3 @@ def error404(request, template_name='404.html'):
         'STATIC_URL': settings.STATIC_URL,
     })
     return http.HttpResponseNotFound(t.render(context))
-
-def home(request, *args, **kwargs):
-    return render(request, 'home.html', {})

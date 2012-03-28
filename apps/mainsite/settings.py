@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
 
     'mainsite',
+    'napkin',
 ]
 
 MIDDLEWARE_CLASSES = [

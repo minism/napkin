@@ -12,9 +12,11 @@
       {% else %}
         <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}bootstrap/css/bootstrap.min.css">
       {% endif %}
-      <script src="{{STATIC_URL}}js/lib/less.js"></script>
     {% endblock %}
-
+    
+    {% if debug %}
+      <script src="{{STATIC_URL}}js/lib/less.js"></script>
+    {% endif %}
   {% endblock %}
   </head>
 
@@ -31,6 +33,7 @@
         <script src="{{STATIC_URL}}js/lib/jquery.js"></script>
         <script src="{{STATIC_URL}}js/lib/underscore.js"></script>
         <script src="{{STATIC_URL}}js/lib/backbone.js"></script>
+        <script src="{{STATIC_URL}}bootstrap-dev/js/bootstrap.js"></script>
 
       {% else %}
 
@@ -38,6 +41,7 @@
         <script src="{{STATIC_URL}}js/lib/jquery-min.js"></script>
         <script src="{{STATIC_URL}}js/lib/underscore-min.js"></script>
         <script src="{{STATIC_URL}}js/lib/backbone-min.js"></script>
+        <script src="{{STATIC_URL}}bootstrap-dev/js/bootstrap.min.js"></script>
 
       {% endif %}
     {% endblock %}
