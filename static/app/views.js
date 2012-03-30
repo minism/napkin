@@ -14,6 +14,10 @@ var ApplicationView = Backbone.View.extend({
         this.editor.setShowPrintMargin(false);
         this.editor.renderer.setShowGutter(false);
 
+        // Store any other view references
+        this.status_el = this.$('#status');
+        this.status('hi');
+
         return this;
     },
 
@@ -21,6 +25,11 @@ var ApplicationView = Backbone.View.extend({
         var height = window.innerHeight - $('#menu').height();
         this.$('.fullscreen').css('height', height);
         this.$('#editor').css('height', height);
+    },
+
+    status: function(message, type) {
+        var type = type || "normal";
+        this.status_el.html(message);
     },
 
 });
