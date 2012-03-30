@@ -2,7 +2,9 @@
 function init()
 {
     // Load application view
-    $('#app-container').html(new app.views.ApplicationView().render().$el);
+    var appView = new app.views.ApplicationView({
+        el: '#app-container',
+    }).render();
 }
 
 // All js files inject into app namespace

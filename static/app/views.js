@@ -1,26 +1,29 @@
 var ApplicationView = Backbone.View.extend({
+    initialize: function() {
+        // Setup global window events
+        $(window).resize(this.fixLayout);
+    },
+
     render: function() {
-        this.$el.html("Hello!");
+        // Load template
+        this.$el.html($('#Application-template').html());
+        this.fixLayout();
+
+        // Load editor
+        this.editor = ace.edit("editor");
+        this.editor.setShowPrintMargin(false);
+        this.editor.renderer.setShowGutter(false);
+
         return this;
-    }
-})
+    },
 
-    // Setup resize callback  
-    // $(window).resize(fix_size);
+    fixLayout: function() {
+        var height = window.innerHeight - $('#menu').height();
+        this.$('.fullscreen').css('height', height);
+        this.$('#editor').css('height', height);
+    },
 
-    // // Load editor
-    // var editor = ace.edit("editor");
-    // editor.setShowPrintMargin(false);
-    // editor.renderer.setShowGutter(false);
-    // fix_size();
-
-// Callback on window resize to fix layout
-// function fix_size()
-// {
-//     var height = window.innerHeight - $('#menu').height();
-//     $('.fullscreen').css('height', height);
-//     $('#editor').css('height', height);
-// }
+});
 
 
 // Namespace
