@@ -81,28 +81,22 @@
 {% block scripts %}
 {{ super() }}
 
+<!-- Load libs for app -->
 <script src="{{STATIC_URL}}lib/ace/src/ace-uncompressed.js"></script>
 
+<!-- Load app files in "app" namespace -->
+<script src="{{STATIC_URL}}app/app.js"></script>
+<script src="{{STATIC_URL}}app/views.js"></script>
+<script src="{{STATIC_URL}}app/models.js"></script>
+<script src="{{STATIC_URL}}app/collections.js"></script>
+<script src="{{STATIC_URL}}app/utils.js"></script>
+
+
 <script>
-
-  // Callback on window resize to fix layout
-  function fix_size()
-  {
-      var height = window.innerHeight - $('#menu').height();
-      $('.fullscreen').css('height', height);
-      $('#editor').css('height', height);
-  }
-
-  $(window).resize(fix_size);
-
-  $(function() {
-    // Load editor
-    var editor = ace.edit("editor");
-    editor.setShowPrintMargin(false);
-    editor.renderer.setShowGutter(false);
-    fix_size();
-  })
-
+$(function() {
+    // Document loaded, initialize backbone app
+    app.init();
+})
 </script>
 
 {% endblock %}
