@@ -27,7 +27,8 @@
 
       {% for i in range(12) %}
         <li>
-          <a href="#"><i class="icon-tag"></i>{{ lipsum(html=False, n=1, min=1, max=2)}}</a>
+          <a href="#">
+          <i class="icon-tag" style="color: {{['cyan', 'black', 'magenta', 'yellow', 'red', 'green', 'blue']|random}};"></i>{{ lipsum(html=False, n=1, min=1, max=2)}}</a>
         </li>
       {% endfor %}
 
@@ -81,6 +82,7 @@
   $(function() {
     // Load editor
     var editor = ace.edit("editor");
+    editor.setShowPrintMargin(false);
     fix_size();
   })
 
