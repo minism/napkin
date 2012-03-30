@@ -1,27 +1,30 @@
 @import "pane.less";
 
-@edge: 1px solid #858585;
+@edge: 1px solid #c5c5c5;
+@menu_height: 25px;
 
-/*html, body 
-{
-    height: 100%;
-}*/
-
-._divider()
+._right_edge()
 {
     border-right: @edge;
 }
 
-#pane1
+#pane1, #pane1-menu
 {
     min-width: 150px;
-    ._divider();
+    ._right_edge();
 }
 
-#pane2
+#pane2, #pane2-menu
 {
     min-width: 250px;
-    ._divider();
+    ._right_edge();
+}
+
+#status
+{
+    width: 75px;
+    height: 100%;
+    background-color: blue;
 }
 
 #editor
@@ -33,12 +36,13 @@
     left: 402px;
 }
 
-#status
+#menu
 {
     position: absolute;
-    left: 402px;
+    left: 0;
     bottom: 0;
     right: 0;
-    height: 25px;
+    width: 100%;
+    height: @menu_height;
     border-top: @edge;
 }

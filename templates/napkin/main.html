@@ -16,7 +16,7 @@
 
 <div class="fullscreen pane-container">
 
-  <div id="pane1" class="pane-fixed">
+  <div id="pane1" class="pane pane-scroll">
     <ul class="nav nav-list">
 
       <li class="active">
@@ -40,7 +40,7 @@
     </ul>
   </div>
 
-  <div id="pane2" class="pane-fixed">
+  <div id="pane2" class="pane pane-scroll">
     <ul class="nav nav-list">
       {% for i in range(50) %}
         <li>
@@ -53,10 +53,26 @@
 
 <!-- Statically positioned elements -->
 <div id="editor"></div>
-<div id="status">
-  <span class="label label-success">Foo</span>
-  <span class="label label-important">Bar</span>
-  <span class="label label-info">Baz</span>
+
+
+<div id="menu" class="pane-container">
+  <div id="pane1-menu" class="pane">
+  Add 1
+  </div>
+
+  <div id="pane2-menu" class="pane">
+  Add 2
+  </div>
+
+  <div id="editor-menu" class="pane">
+    <span class="label label-success">Foo</span>
+    <span class="label label-important">Bar</span>
+    <span class="label label-info">Baz</span>
+  </div>
+
+  <div id="status" class="pull-right">
+  Status
+  </div>
 </div>
 
 {% endblock %}
@@ -72,9 +88,9 @@
   // Callback on window resize to fix layout
   function fix_size()
   {
-      var height = window.innerHeight;
+      var height = window.innerHeight - $('#menu').height();
       $('.fullscreen').css('height', height);
-      $('#editor').css('height', height - $('#status').height());
+      $('#editor').css('height', height);
   }
 
   $(window).resize(fix_size);
