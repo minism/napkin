@@ -14,66 +14,7 @@
 
 {% block content %}
 
-<div class="fullscreen pane-container">
-
-  <div id="pane1" class="pane pane-scroll">
-    <ul class="nav nav-list">
-
-      <li class="active">
-        <a href="#"><i class="icon-align-justify"></i>Queue</a>
-      </li>
-
-      <li class="divider"></li>
-
-      {% for i in range(12) %}
-        <li>
-          <a href="#">
-          <i class="icon-tag" style="color: {{['cyan', 'black', 'magenta', 'yellow', 'red', 'green', 'blue']|random}};"></i>{{ lipsum(html=False, n=1, min=1, max=2)}}</a>
-        </li>
-      {% endfor %}
-
-      <li class="divider"></li>
-
-      <li>
-        <a href="#"><i class="icon-trash"></i>Trash</a>
-      </li>
-    </ul>
-  </div>
-
-  <div id="pane2" class="pane pane-scroll">
-    <ul class="nav nav-list">
-      {% for i in range(50) %}
-        <li>
-          <a href="#"><i class="icon-file"></i>{{ lipsum(html=False, n=1, min=2, max=4)}}</a>
-        </li>
-      {% endfor %}
-    </ul>
-    </div>
-</div>
-
-<!-- Statically positioned elements -->
-<div id="editor"></div>
-
-
-<div id="menu" class="pane-container">
-  <div id="pane1-menu" class="pane">
-  Add 1
-  </div>
-
-  <div id="pane2-menu" class="pane">
-  Add 2
-  </div>
-
-  <div id="editor-menu" class="pane">
-    <span class="label label-success">Foo</span>
-    <span class="label label-important">Bar</span>
-    <span class="label label-info">Baz</span>
-  </div>
-
-  <div id="status" class="pull-right">
-  Status
-  </div>
-</div>
+<div id="app-container"></div>
 
 {% endblock %}
 
@@ -89,8 +30,8 @@
 <script src="{{STATIC_URL}}app/views.js"></script>
 <script src="{{STATIC_URL}}app/models.js"></script>
 <script src="{{STATIC_URL}}app/collections.js"></script>
+<script src="{{STATIC_URL}}app/loader.js"></script>
 <script src="{{STATIC_URL}}app/utils.js"></script>
-
 
 <script>
 $(function() {
