@@ -18,46 +18,32 @@
 
   <div id="pane1" class="pane-fixed">
     <ul class="nav nav-list">
-      <li class="nav-header">
-        Collections
-      </li>
 
       <li class="active">
-        <a href="#">Queue</a>
+        <a href="#"><i class="icon-align-justify"></i>Queue</a>
       </li>
 
       <li class="divider"></li>
 
-      <li>
-        <a href="#">Tag 1</a>
-      </li>
-      <li>
-        <a href="#">Tag 2</a>
-      </li>
-      <li>
-        <a href="#">Tag 3</a>
-      </li>
+      {% for i in range(12) %}
+        <li>
+          <a href="#"><i class="icon-tag"></i>{{ lipsum(html=False, n=1, min=1, max=2)}}</a>
+        </li>
+      {% endfor %}
 
       <li class="divider"></li>
 
       <li>
-        <a href="#">Trash</a>
+        <a href="#"><i class="icon-trash"></i>Trash</a>
       </li>
     </ul>
   </div>
 
   <div id="pane2" class="pane-fixed">
     <ul class="nav nav-list">
-      <li class="nav-header">
-        Notes
-      </li>
-
-      <li class="active">
-        <a href="#">{{ lipsum(html=False, n=1, min=2, max=6)}}</a>
-      </li>
       {% for i in range(50) %}
         <li>
-          <a href="#">{{ lipsum(html=False, n=1, min=2, max=4)}}</a>
+          <a href="#"><i class="icon-file"></i>{{ lipsum(html=False, n=1, min=2, max=4)}}</a>
         </li>
       {% endfor %}
     </ul>
@@ -66,7 +52,11 @@
 
 <!-- Statically positioned elements -->
 <div id="editor"></div>
-<div id="status"></div>
+<div id="status">
+  <span class="label label-success">Foo</span>
+  <span class="label label-important">Bar</span>
+  <span class="label label-info">Baz</span>
+</div>
 
 {% endblock %}
 
