@@ -16,6 +16,13 @@ urlpatterns = patterns('',
 )
 
 
+
+# Static file serving
+urlpatterns += patterns('',
+    url(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': settings.STATIC_URL + 'img/favicon.png'}),
+) 
+
+
 if getattr(settings, 'DEBUG', True) or getattr(settings, 'DEBUG_MEDIA', True):
     media_url = getattr(settings, 'MEDIA_URL', '/media/')
     if media_url[0] == '/':

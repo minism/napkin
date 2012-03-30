@@ -59,12 +59,39 @@
         </li>
       {% endfor %}
     </ul>
-  </div>
-
-  <div id="pane3" class="pane-expand">
-    {{ lipsum(n=100) }}
-  </div>
-
+    </div>
 </div>
+
+<!-- Editor sized separately -->
+<div id="editor"></div>
+
+{% endblock %}
+
+
+{% block scripts %}
+{{ super() }}
+
+<script src="{{STATIC_URL}}lib/ace/src/ace-uncompressed.js"></script>
+
+<script>
+
+  // Callback on window resize to fix layout
+  function fix_size()
+  {
+      var height = window.innerHeight;
+      $('.fullscreen').css('height', height);
+      $('#editor').css('height', height);
+  }
+
+  $(window).resize(fix_size);
+
+  $(function() {
+    // Load editor
+    var editor = ace.edit("editor");
+
+    fix_size();
+  })
+
+</script>
 
 {% endblock %}

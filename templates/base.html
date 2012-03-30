@@ -15,7 +15,7 @@
     {% endblock %}
     
     {% if debug %}
-      <script src="{{STATIC_URL}}js/lib/less.js"></script>
+      <script src="{{STATIC_URL}}lib/less.js"></script>
     {% endif %}
   {% endblock %}
   </head>
@@ -30,17 +30,17 @@
       {% if debug %}
 
         <!-- Dev libs -->
-        <script src="{{STATIC_URL}}js/lib/jquery.js"></script>
-        <script src="{{STATIC_URL}}js/lib/underscore.js"></script>
-        <script src="{{STATIC_URL}}js/lib/backbone.js"></script>
+        <script src="{{STATIC_URL}}lib/jquery.js"></script>
+        <script src="{{STATIC_URL}}lib/underscore.js"></script>
+        <script src="{{STATIC_URL}}lib/backbone.js"></script>
         <script src="{{STATIC_URL}}bootstrap-dev/js/bootstrap.js"></script>
 
       {% else %}
 
         <!-- Minified libs -->
-        <script src="{{STATIC_URL}}js/lib/jquery-min.js"></script>
-        <script src="{{STATIC_URL}}js/lib/underscore-min.js"></script>
-        <script src="{{STATIC_URL}}js/lib/backbone-min.js"></script>
+        <script src="{{STATIC_URL}}lib/jquery-min.js"></script>
+        <script src="{{STATIC_URL}}lib/underscore-min.js"></script>
+        <script src="{{STATIC_URL}}lib/backbone-min.js"></script>
         <script src="{{STATIC_URL}}bootstrap-dev/js/bootstrap.min.js"></script>
 
       {% endif %}
