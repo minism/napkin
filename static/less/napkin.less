@@ -1,5 +1,7 @@
 @import "pane.less";
 
+@edge: 1px solid #858585;
+
 /*html, body 
 {
     height: 100%;
@@ -7,7 +9,7 @@
 
 ._divider()
 {
-    border-right: 1px solid #858585;
+    border-right: @edge;
 }
 
 #pane1
@@ -25,9 +27,18 @@
 #editor
 {
     position: absolute;
-    margin: 0;
     top: 0;
     bottom: 0;
     right: 0;
     left: 402px;
+}
+
+#status
+{
+    position: absolute;
+    left: 402px;
+    bottom: 0;
+    right: 0;
+    height: 20px;
+    border-top: @edge;
 }

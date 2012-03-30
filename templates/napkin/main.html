@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% block page_title %}Napkin{%endblock%}
+
 {% block styles %}
   {{ super() }}
 
@@ -62,8 +64,9 @@
     </div>
 </div>
 
-<!-- Editor sized separately -->
+<!-- Statically positioned elements -->
 <div id="editor"></div>
+<div id="status"></div>
 
 {% endblock %}
 
@@ -80,7 +83,7 @@
   {
       var height = window.innerHeight;
       $('.fullscreen').css('height', height);
-      $('#editor').css('height', height);
+      $('#editor').css('height', height - $('#status').height());
   }
 
   $(window).resize(fix_size);
@@ -88,7 +91,6 @@
   $(function() {
     // Load editor
     var editor = ace.edit("editor");
-
     fix_size();
   })
 

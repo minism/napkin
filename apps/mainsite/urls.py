@@ -19,7 +19,8 @@ urlpatterns = patterns('',
 
 # Static file serving
 urlpatterns += patterns('',
-    url(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': settings.STATIC_URL + 'img/favicon.png'}),
+    url(r'^favicon\.png$', 'django.views.generic.simple.redirect_to', {'url': settings.STATIC_URL + 'img/favicon.png'}),
+    url(r'^robots\.txt$', 'django.views.generic.simple.redirect_to', {'url': settings.STATIC_URL + 'flat/robots.txt'}),
 ) 
 
 
