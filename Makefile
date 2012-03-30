@@ -1,5 +1,5 @@
-BOOTSTRAP_DEV = static/bootstrap-dev
-BOOTSTRAP = static/bootstrap
+BOOTSTRAP_DEV = static/lib/bootstrap-dev
+BOOTSTRAP = static/lib/bootstrap
 
 all:
 	cd ${BOOTSTRAP_DEV} && make

@@ -8,9 +8,9 @@
 
     {% block styles %}
       {% if debug %}
-        <link rel="stylesheet/less" type="text/css" href="{{STATIC_URL}}bootstrap-dev/less/bootstrap.less">
+        <link rel="stylesheet/less" type="text/css" href="{{STATIC_URL}}lib/bootstrap-dev/less/bootstrap.less">
       {% else %}
-        <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}lib/bootstrap/css/bootstrap.min.css">
       {% endif %}
     {% endblock %}
     
@@ -33,7 +33,7 @@
         <script src="{{STATIC_URL}}lib/jquery.js"></script>
         <script src="{{STATIC_URL}}lib/underscore.js"></script>
         <script src="{{STATIC_URL}}lib/backbone.js"></script>
-        <script src="{{STATIC_URL}}bootstrap-dev/js/bootstrap.js"></script>
+        <script src="{{STATIC_URL}}lib/bootstrap-dev/js/bootstrap.js"></script>
 
       {% else %}
 
@@ -41,7 +41,7 @@
         <script src="{{STATIC_URL}}lib/jquery-min.js"></script>
         <script src="{{STATIC_URL}}lib/underscore-min.js"></script>
         <script src="{{STATIC_URL}}lib/backbone-min.js"></script>
-        <script src="{{STATIC_URL}}bootstrap-dev/js/bootstrap.min.js"></script>
+        <script src="{{STATIC_URL}}lib/bootstrap-dev/js/bootstrap.min.js"></script>
 
       {% endif %}
     {% endblock %}
