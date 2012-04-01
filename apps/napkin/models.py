@@ -1,6 +1,8 @@
 from django.db import models
+import basic_models.models
 
-class Tag(models.Model):
+
+class Tag(basic_models.models.DefaultModel):
     name = models.CharField(max_length=32, unique=True)
 
     class Meta:
@@ -9,7 +11,8 @@ class Tag(models.Model):
     def __unicode__(self):
         return self.name
 
-class Note(models.Model):
+
+class Note(basic_models.models.DefaultModel):
     name = models.CharField(max_length=255)
 
     # TODO: lookup the best size for this

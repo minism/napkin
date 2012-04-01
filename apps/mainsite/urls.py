@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib import admin
 
 import napkin.views
-
+import napkin.urls
 
 admin.autodiscover()
 
@@ -12,6 +12,7 @@ handler404 = 'mainsite.views.error404'
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^napkin/', include(napkin.urls)),
     url(r'^$', napkin.views.MainView.as_view()),
 )
 
