@@ -8,6 +8,7 @@ function init()
 }
 
 // All js files inject into app namespace
+app = window.app || {};
 app = {
-    init: init
-}
+    init: init,
+};

@@ -36,6 +36,7 @@ var ApplicationView = Backbone.View.extend({
 
 
 // Namespace
+app = window.app || {};
 app.views = {
     ApplicationView: ApplicationView,
-}
+};
