@@ -3,7 +3,7 @@
 @edge: 1px solid #c5c5c5;
 @menu_height: 32px;
 
-._right_edge()
+#pane1, #pane2
 {
     border-right: @edge;
 }
@@ -11,13 +11,11 @@
 #pane1, #pane1-menu
 {
     min-width: 150px;
-    ._right_edge();
 }
 
 #pane2, #pane2-menu
 {
     min-width: 250px;
-    ._right_edge();
 }
 
 #status
@@ -38,6 +36,8 @@
 
 #menu
 {
+    z-index: 5;
+    background-color: #c9c9c9;
     position: absolute;
     left: 0;
     bottom: 0;
@@ -45,5 +45,61 @@
     width: 100%;
     padding: 2px;
     height: @menu_height;
-    border-top: @edge;
+}
+
+#popup-control
+{
+    display: none;
+}
+
+
+/* Small size */
+@media screen and (max-width: 500px)
+{
+    .pane-container
+    {
+        display: block;
+    }
+
+    #editor
+    {
+        /*display: none;*/
+        left: 0;
+    }
+
+    #menu
+    {
+        /*display: none;*/
+    }
+
+    #pane1, #pane2
+    {
+        display: none;
+        min-width: 0;
+        border: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    #pane1
+    {
+        float: left;
+        width: 30%
+    }
+
+    #pane2
+    {
+        float: right;
+        width: 70%
+    }
+
+    #pane1-menu, #pane2-menu
+    {
+        min-width: 0;
+    }
+
+    #popup-control
+    {
+        display: inline;
+    }
 }
