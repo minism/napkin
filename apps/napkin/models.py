@@ -6,7 +6,7 @@ class Tag(basic_models.models.DefaultModel):
     name = models.CharField(max_length=32, unique=True)
 
     class Meta:
-        ordering = ['name']
+        ordering = ['-created_at']
 
     def __unicode__(self):
         return self.name
@@ -21,7 +21,7 @@ class Note(basic_models.models.DefaultModel):
 
     # TODO: order by creation time
     class Meta:
-        ordering = ['name']
+        ordering = ['-created_at']
 
     def __unicode__(self):
         return self.name

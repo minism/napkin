@@ -1,3 +1,9 @@
+// Icon HTML
+var icon = {
+    tag: '<i class="icon-tag"></i>',
+    file: '<i class="icon-file"></i>',
+};
+
 var InflatingView = Backbone.View.extend({
     template: '<div class="alert alert-error">GIVE A TEMPLATE!</DIV>',
 
@@ -80,8 +86,11 @@ var ApplicationView = InflatingView.extend({
 
 var ListView = InflatingView.extend({
     tagName: 'div',
+    itemViewClass: null,
 
     initialize: function(options) {
+        InflatingView.prototype.initialize.call(this, arguments);
+
         var options = _.extend({}, options);
         this.collection = options.collection;
 
@@ -105,14 +114,62 @@ var ListView = InflatingView.extend({
     fillList: function() {
         this.list.empty();
         this.collection.each(_.bind(function(item) {
-            this.list.append($('<li/>').html(item.get('name'))); 
+            var itemView = new this.itemViewClass({
+                model: item,
+            });
+            this.list.append(itemView.render().$el); 
         }, this));
     },
 });
 
 
+var TagView = InflatingView.extend({
+    template: $('#TagItem-template').html(),
+    tagName: 'li',
+
+    initialize: function() {
+        InflatingView.prototype.initialize.call(this, arguments);
+        
+        // Events
+        this.model.bind('change', this.render, this);
+    },
+
+    render: function() {
+        InflatingView.prototype.render.call(this, arguments);
+
+        // Update fixtures
+        this.$('.f-name').html(icon.tag + this.model.get('name'));
+
+        return this;
+    },
+});
+
+
+var NoteView = InflatingView.extend({
+    template: $('#NoteItem-template').html(),
+    tagName: 'li',
+
+    initialize: function() {
+        InflatingView.prototype.initialize.call(this, arguments);
+        
+        // Events
+        this.model.bind('change', this.render, this);
+    },
+
+    render: function() {
+        InflatingView.prototype.render.call(this, arguments);
+
+        // Update fixtures
+        this.$('.f-name').html(icon.file + this.model.get('name'));
+
+        return this;
+    },
+})
+
+
 var TagListView = ListView.extend({
     template: $('#TagList-template').html(),
+    itemViewClass: TagView,
 
     render: function() {
         ListView.prototype.render.call(this, arguments);
@@ -123,26 +180,13 @@ var TagListView = ListView.extend({
 
 var NoteListView = ListView.extend({
     template: $('#NoteList-template').html(),
+    itemViewClass: NoteView,
 
     render: function() {
         ListView.prototype.render.call(this, arguments);
         return this;
     }, 
 });
-
-
-var TagView = InflatingView.extend({
-    template: $('#TagItem-template').html(),
-    tagName: 'li',
-});
-
-var NoteView = InflatingView.extend({
-    template: $('#NoteItem-template').html(),
-    tagName: 'li'
-})
-
-
-
 
 
 // Namespace
