@@ -1,18 +1,13 @@
 <script type="text/template" id="Application-template">
 
 <div class="fullscreen pane-container">
-
   <div id="pane1" class="pane pane-scroll">
   </div>
-
   <div id="pane2" class="pane pane-scroll">
   </div>
-
 </div>
 
-<!-- Statically positioned elements -->
 <div id="editor"></div>
-
 
 <div id="menu" class="pane-container">
   <div id="pane1-menu" class="pane">
@@ -41,29 +36,39 @@
 
   <ul class="nav nav-list">
     <li class="active">
-      <a href="#"><i class="icon-align-justify"></i>Queue</a>
+      <a href="#"><i class="icon-align-justify f-queue"></i>Queue</a>
     </li>
 
     <li class="divider"></li>
-      <li>
-        <a href="#"><i class="icon-tag" style="red"></i>Tag</a>
-      </li>
+    <div class="f-list"></div>
+    <li>
+    </li>
 
     <li class="divider"></li>
     <li>
-      <a href="#"><i class="icon-trash"></i>Trash</a>
+      <a href="#"><i class="icon-trash f-trash"></i>Trash</a>
     </li>
   </ul>
 
 </script>
 
 
+<script type="text/template" id="TagItem-template">
+
+  <a href="#" class="f-name"><i class="icon-tag"></i></a>
+
+</script>
+
+
 <script type="text/template" id="NoteList-template">
 
-  <ul class="nav nav-list">
-      <li>
-        <a href="#"><i class="icon-file"></i>Document</a>
-      </li>
-  </ul>
+  <ul class="nav nav-list f-list"></ul>
+
+</script>
+
+
+<script type="text/template" id="NoteItem-template">
+
+  <a href="#" class="f-name"><i class="icon-file"></i></a>
 
 </script>

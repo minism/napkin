@@ -6,6 +6,7 @@ from napkin.models import Tag, Note
 BASIC_MODEL_EXCLUDE = [
     'created_at',
     'updated_at',
+    'is_active',
 ]
 
 
@@ -19,5 +20,5 @@ class TagResource(ModelResource):
 class NoteResource(ModelResource):
     class Meta:
         queryset = Note.active_objects.all()
-        resource_name = 'tag'
+        resource_name = 'note'
         excludes = BASIC_MODEL_EXCLUDE
