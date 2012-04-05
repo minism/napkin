@@ -55,6 +55,10 @@ var ApplicationView = InflatingView.extend({
         });
         this.$('#pane2').html(this.notelist.render().$el);
 
+        // Bind callbacks
+        this.taglist.on('itemSelected', this.tagSelected, this);
+        this.notelist.on('itemSelected', this.noteSelected, this);
+
         // Load editor
         this.editor = ace.edit("editor");
         this.editor.setShowPrintMargin(false);
@@ -68,6 +72,16 @@ var ApplicationView = InflatingView.extend({
         this.fixLayout();
 
         return this;
+    },
+
+    tagSelected: function(tagView) {
+        console.log(tagView.model.id);
+    },
+
+    noteSelected: function(noteView) {
+        // Load document text
+        debugger;
+        this.editor.getSession().setValue(noteView.model.get('text'));
     },
 
     fixLayout: function() {
@@ -111,31 +125,63 @@ var ListView = InflatingView.extend({
         return this;
     },
 
+    addItem: function(itemView, top) {
+        if (top)
+            this.list.prepend(itemView.render().$el);
+        else
+            this.list.append(itemView.render().$el);
+
+        // Bind callbacks
+        itemView.on('selected', function(view) {
+            this.trigger('itemSelected', view);
+        }, this);
+    },
+
     fillList: function() {
         this.list.empty();
         this.collection.each(_.bind(function(item) {
-            var itemView = new this.itemViewClass({
+            this.addItem(new this.itemViewClass({
                 model: item,
-            });
-            this.list.append(itemView.render().$el); 
+            }));
         }, this));
     },
 });
 
 
-var TagView = InflatingView.extend({
-    template: $('#TagItem-template').html(),
+var ItemView = InflatingView.extend({
     tagName: 'li',
+
+    events: {
+        'click': 'onClick',
+    },
+
+    onClick: function() {
+        // Set as only active
+        this.$el.addClass('active');
+        this.$el.siblings().removeClass('active');
+
+        // Emit event
+        this.trigger('selected', this);
+    },
 
     initialize: function() {
         InflatingView.prototype.initialize.call(this, arguments);
+    },
+})
+
+
+var TagView = ItemView.extend({
+    template: $('#TagItem-template').html(),
+
+    initialize: function() {
+        ItemView.prototype.initialize.call(this, arguments);
         
         // Events
         this.model.bind('change', this.render, this);
     },
 
     render: function() {
-        InflatingView.prototype.render.call(this, arguments);
+        ItemView.prototype.render.call(this, arguments);
 
         // Update fixtures
         this.$('.f-name').html(icon.tag + this.model.get('name'));
@@ -145,19 +191,18 @@ var TagView = InflatingView.extend({
 });
 
 
-var NoteView = InflatingView.extend({
+var NoteView = ItemView.extend({
     template: $('#NoteItem-template').html(),
-    tagName: 'li',
 
     initialize: function() {
-        InflatingView.prototype.initialize.call(this, arguments);
+        ItemView.prototype.initialize.call(this, arguments);
         
         // Events
         this.model.bind('change', this.render, this);
     },
 
     render: function() {
-        InflatingView.prototype.render.call(this, arguments);
+        ItemView.prototype.render.call(this, arguments);
 
         // Update fixtures
         this.$('.f-name').html(icon.file + this.model.get('name'));
