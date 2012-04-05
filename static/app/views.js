@@ -2,6 +2,8 @@
 var icon = {
     tag: '<i class="icon-tag"></i>',
     file: '<i class="icon-file"></i>',
+    list: '<i class="icon-align-justify"></i>',
+    trash: '<i class="icon-trash"></i>',
 };
 
 var InflatingView = Backbone.View.extend({
@@ -125,11 +127,15 @@ var ListView = InflatingView.extend({
         return this;
     },
 
-    addItem: function(itemView, top) {
-        if (top)
-            this.list.prepend(itemView.render().$el);
+    addItem: function(itemView, options) {
+        var options = _.extend({
+            top: false,
+            list: this.list,
+        }, options || {});
+        if (options.top)
+            options.list.prepend(itemView.render().$el);
         else
-            this.list.append(itemView.render().$el);
+            options.list.append(itemView.render().$el);
 
         // Bind callbacks
         itemView.on('selected', function(view) {
@@ -159,6 +165,7 @@ var ItemView = InflatingView.extend({
         // Set as only active
         this.$el.addClass('active');
         this.$el.siblings().removeClass('active');
+        this.$el.parents('ul').siblings('ul').children('li').removeClass('active');
 
         // Emit event
         this.trigger('selected', this);
@@ -218,6 +225,19 @@ var TagListView = ListView.extend({
 
     render: function() {
         ListView.prototype.render.call(this, arguments);
+
+        // Add dedicated items
+        var queue = new ItemView;
+        queue.on('selected', function() { 
+            this.trigger('queueSelected');
+        }, this);
+        this.$('.f-head').prepend(queue.render().$el.html('<a href="#">' + icon.list + 'Queue</a>'));
+        var trash = new ItemView;
+        trash.on('selected', function() { 
+            this.trigger('trashSelected');
+        }, this);
+        this.$('.f-tail').append(trash.render().$el.html('<a href="#">' + icon.trash + 'Trash</a>'));
+
         return this;
     },
 });
