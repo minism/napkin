@@ -31,6 +31,11 @@ var ApplicationView = InflatingView.extend({
     template: $('#Application-template').html(),
     tagName: 'div',
 
+    // Simple events
+    events: {
+        'click #add-note': 'addNote',
+    },
+
     initialize: function() {
         // Setup primary collections
         this.tags = new app.models.TagCollection();
@@ -41,10 +46,26 @@ var ApplicationView = InflatingView.extend({
 
         // Setup global window events
         $(window).resize(this.fixLayout);
+
+        // References to active data
+        this.activeNote = null;
+
+        // References to pending models so add actions can reuse an object
+        this.pendingNote = null;
+        this.pendingTag = null;
+
+        // Timer state
+        this.timers = {
+            save: 0,
+        };
     },
 
     render: function() {
         InflatingView.prototype.render.call(this, arguments);
+
+        // Store misc view references
+        this.status_el = this.$('#status');
+        this.status('Loading...');
 
         // Load tag listview
         this.taglist = new TagListView({
@@ -62,31 +83,41 @@ var ApplicationView = InflatingView.extend({
         this.taglist.on('itemSelected', this.tagSelected, this);
         this.notelist.on('itemSelected', this.noteSelected, this);
         this.taglist.on('queueSelected', function() {
-            // Queue should retrieve notes with no tags yet defined
-            this.notes.fetch({
-                data: {
-                    'tags__isnull': 'True',  
-                },
-            });
+            return this.tagSelected('queue');
         }, this);
-
 
         // Load editor
         this.editor = ace.edit("editor");
         this.editor.setShowPrintMargin(false);
         this.editor.renderer.setShowGutter(false);
 
-        // Store any other view references
-        this.status_el = this.$('#status');
-        this.status('hi');
+        // Editor events
+        this.$('#editor > textarea').keypress(_.bind(this.invalidate, this));
 
-        // Apply resize
+        // Apply resize once -- auto on window resize afterwards
         this.fixLayout();
+
+        this.status('Idle');
 
         return this;
     },
 
     tagSelected: function(tagView) {
+        // Clean up temp data
+        this.pendingNote = null;
+
+        // Check for special tags
+        if (tagView == 'queue')
+        {
+            // Queue should retrieve notes with no tags yet defined
+            this.notes.fetch({
+                data: {
+                    'tags__isnull': 'True',  
+                },
+            });
+            return;
+        }
+    
         // Load notes containing tag
         this.notes.fetch({
             data: {
@@ -96,9 +127,65 @@ var ApplicationView = InflatingView.extend({
     },
 
     noteSelected: function(noteView) {
-        // Load document text
-        debugger;
-        this.editor.getSession().setValue(noteView.model.get('text'));
+        this.loadNote(noteView.model);
+    },
+
+    // Editor data was modified
+    invalidate: function() {
+        if (this.timers.save)
+        {
+            // Save already queued, NOP
+            return
+        }
+   
+        // Update status
+        this.staterr('Unsaved data');
+
+        // Schedule a save action
+        _.delay(_.bind(this.saveNote, this), 3000);
+        this.timers.save = 1;
+    },
+
+    loadNote: function(note) {
+        // Reset status
+        this.status('Idle');
+
+        // Set active
+        this.activeNote = note;
+
+        // Load note text
+        this.editor.getSession().setValue(note.get('text'));  
+    },
+
+    saveNote: function() {
+        if (!this.activeNote)
+            // Disregard this call, but its kind of concerning...
+            return
+
+        // Save editor buffer into backbone object
+        this.activeNote.save({
+            text: this.editor.getSession().getValue(),
+        }, {
+            success: _.bind(function(model, res) {
+                this.statok('Saved');
+            }, this),
+            error: _.bind(function(model, res) {
+                this.staterr(res.message);
+            }, this),
+        });
+
+        // Release timer lock
+        this.timers.save = 0;
+    },
+
+    addNote: function() {
+        if (!this.pendingNote)
+        {
+            this.pendingNote = new app.models.Note;
+            this.notelist.addItem(this.pendingNote, {
+                top: true,
+            });
+        }
     },
 
     fixLayout: function() {
@@ -111,6 +198,10 @@ var ApplicationView = InflatingView.extend({
         var type = type || "info";
         this.status_el.html($('<div/>').addClass('alert alert-' + type).html(message));
     },
+
+    // Shortcuts
+    staterr: function(m) { return this.status(m, 'error'); },
+    statok: function(m) { return this.status(m, 'success'); },
 
 });
 
@@ -142,11 +233,14 @@ var ListView = InflatingView.extend({
         return this;
     },
 
-    addItem: function(itemView, options) {
+    addItem: function(item, options) {
         var options = _.extend({
             top: false,
             list: this.list,
         }, options || {});
+        var itemView = new this.itemViewClass({
+            model: item,
+        });
         if (options.top)
             options.list.prepend(itemView.render().$el);
         else
@@ -161,9 +255,7 @@ var ListView = InflatingView.extend({
     fillList: function() {
         this.list.empty();
         this.collection.each(_.bind(function(item) {
-            this.addItem(new this.itemViewClass({
-                model: item,
-            }));
+            this.addItem(item);
         }, this));
     },
 });
