@@ -108,8 +108,8 @@ var ApplicationView = InflatingView.extend({
     },
 
     status: function(message, type) {
-        var type = type || "normal";
-        this.status_el.html(message);
+        var type = type || "info";
+        this.status_el.html($('<div/>').addClass('alert alert-' + type).html(message));
     },
 
 });
