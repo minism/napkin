@@ -32,11 +32,12 @@ var ApplicationView = InflatingView.extend({
     tagName: 'div',
 
     initialize: function() {
-        // Load data 
+        // Setup primary collections
         this.tags = new app.models.TagCollection();
         this.notes = new app.models.NoteCollection();
+
+        // Initialize app with tags loaded
         this.tags.fetch();
-        this.notes.fetch();
 
         // Setup global window events
         $(window).resize(this.fixLayout);
@@ -60,6 +61,15 @@ var ApplicationView = InflatingView.extend({
         // Bind callbacks
         this.taglist.on('itemSelected', this.tagSelected, this);
         this.notelist.on('itemSelected', this.noteSelected, this);
+        this.taglist.on('queueSelected', function() {
+            // Queue should retrieve notes with no tags yet defined
+            this.notes.fetch({
+                data: {
+                    'tags__isnull': 'True',  
+                },
+            });
+        }, this);
+
 
         // Load editor
         this.editor = ace.edit("editor");
@@ -77,7 +87,12 @@ var ApplicationView = InflatingView.extend({
     },
 
     tagSelected: function(tagView) {
-        console.log(tagView.model.id);
+        // Load notes containing tag
+        this.notes.fetch({
+            data: {
+                'tags__id': tagView.model.id,  
+            },
+        });
     },
 
     noteSelected: function(noteView) {

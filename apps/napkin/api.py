@@ -1,4 +1,5 @@
-from tastypie.resources import ModelResource
+from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
+from tastypie import fields
 
 from napkin.models import Tag, Note
 
@@ -15,10 +16,17 @@ class TagResource(ModelResource):
         queryset = Tag.active_objects.all()
         resource_name = 'tag'
         excludes = BASIC_MODEL_EXCLUDE
+        filtering = {
+            'id': ALL,
+        }
 
 
 class NoteResource(ModelResource):
+    tags = fields.ManyToManyField(TagResource, 'tags', full=False)
     class Meta:
         queryset = Note.active_objects.all()
         resource_name = 'note'
         excludes = BASIC_MODEL_EXCLUDE
+        filtering = {
+            'tags': ALL_WITH_RELATIONS,
+        }
