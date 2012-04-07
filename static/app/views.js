@@ -46,6 +46,9 @@ var ApplicationView = InflatingView.extend({
 
         // Setup global window events
         $(window).resize(this.fixLayout);
+        window.onbeforeunload = function() {
+             alert('hi');
+        }
 
         // References to active data
         this.activeNote = null;
@@ -56,7 +59,7 @@ var ApplicationView = InflatingView.extend({
 
         // Timer state
         this.timers = {
-            save: 0,
+            save: null,
         };
     },
 
@@ -87,12 +90,10 @@ var ApplicationView = InflatingView.extend({
         }, this);
 
         // Load editor
-        this.editor = ace.edit("editor");
-        this.editor.setShowPrintMargin(false);
-        this.editor.renderer.setShowGutter(false);
+        this.editor = this.newEditor();
 
         // Editor events
-        this.$('#editor > textarea').keypress(_.bind(this.invalidate, this));
+        this.$('#editor').keypress(_.bind(this.invalidate, this));
 
         // Apply resize once -- auto on window resize afterwards
         this.fixLayout();
@@ -100,6 +101,25 @@ var ApplicationView = InflatingView.extend({
         this.status('Idle');
 
         return this;
+    },
+
+    // Factory method to create and setup an ACE editor
+    newEditor: function() {
+        var editor = ace.edit("editor");
+        editor.setShowPrintMargin(false);
+        editor.renderer.setShowGutter(false);
+        debugger;
+        editor.commands.addCommand({
+            name: 'Save',
+            bindKey: {
+                win: 'Ctrl-S',
+                mac: 'Command-J',
+            },
+            exec: _.bind(function (editor) {
+                return this.saveNote();
+            }, this),
+        });
+        return editor;
     },
 
     tagSelected: function(tagView) {
@@ -132,21 +152,18 @@ var ApplicationView = InflatingView.extend({
 
     // Editor data was modified
     invalidate: function() {
-        if (this.timers.save)
-        {
-            // Save already queued, NOP
-            return
-        }
-   
         // Update status
-        this.staterr('Unsaved data');
+        this.staterr('Unsaved changes');
+    },
 
-        // Schedule a save action
-        _.delay(_.bind(this.saveNote, this), 3000);
-        this.timers.save = 1;
+    closeNote: function() {
+        this.activeNote = null;
     },
 
     loadNote: function(note) {
+        // Cleanly close previous note
+        this.closeNote();
+
         // Reset status
         this.status('Idle');
 
@@ -173,9 +190,6 @@ var ApplicationView = InflatingView.extend({
                 this.staterr(res.message);
             }, this),
         });
-
-        // Release timer lock
-        this.timers.save = 0;
     },
 
     addNote: function() {
