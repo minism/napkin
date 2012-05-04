@@ -26,7 +26,7 @@
     {% block content %}
     {% endblock %}
 
-    {% block scripts %}
+    {% block scripts %} 
       {% if debug %}
 
         <!-- Dev libs -->
@@ -44,6 +44,8 @@
         <script src="{{STATIC_URL}}lib/bootstrap-dev/js/bootstrap.min.js"></script>
 
       {% endif %}
+
+      <script src="{{STATIC_URL}}lib/backbone-tastypie.js"</script>
     {% endblock %}
 
   {% endblock %}

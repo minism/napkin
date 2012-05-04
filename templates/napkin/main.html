@@ -23,16 +23,18 @@
 {{ super() }}
 
 <!-- Load libs for app -->
+
+<script src="{{STATIC_URL}}lib/ace/src/ace-uncompressed.js"></script>
 <script src="{{STATIC_URL}}lib/ace/src/ace-uncompressed.js"></script>
 
 <!-- Load backbone templates -->
 {% include "napkin/widgets.html" %}
 
 <!-- Load app files in "app" namespace -->
-<script src="{{STATIC_URL}}app/app.js"></script>
 <script src="{{STATIC_URL}}app/views.js"></script>
 <script src="{{STATIC_URL}}app/models.js"></script>
 <script src="{{STATIC_URL}}app/utils.js"></script>
+<script src="{{STATIC_URL}}app/app.js"></script>
 
 
 <script>

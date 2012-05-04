@@ -27,199 +27,6 @@ var InflatingView = Backbone.View.extend({
 })
 
 
-var ApplicationView = InflatingView.extend({
-    template: $('#Application-template').html(),
-    tagName: 'div',
-
-    // Simple events
-    events: {
-        'click #add-note': 'addNote',
-    },
-
-    initialize: function() {
-        // Setup primary collections
-        this.tags = new app.models.TagCollection();
-        this.notes = new app.models.NoteCollection();
-
-        // Initialize app with tags loaded
-        this.tags.fetch();
-
-        // Setup global window events
-        $(window).resize(this.fixLayout);
-        window.onbeforeunload = function() {
-             alert('hi');
-        }
-
-        // References to active data
-        this.activeNote = null;
-
-        // References to pending models so add actions can reuse an object
-        this.pendingNote = null;
-        this.pendingTag = null;
-
-        // Timer state
-        this.timers = {
-            save: null,
-        };
-    },
-
-    render: function() {
-        InflatingView.prototype.render.call(this, arguments);
-
-        // Store misc view references
-        this.status_el = this.$('#status');
-        this.status('Loading...');
-
-        // Load tag listview
-        this.taglist = new TagListView({
-            collection: this.tags,
-        });
-        this.$('#pane1').html(this.taglist.render().$el);
-        
-        // Load note listview
-        this.notelist = new NoteListView({
-            collection: this.notes,
-        });
-        this.$('#pane2').html(this.notelist.render().$el);
-
-        // Bind callbacks
-        this.taglist.on('itemSelected', this.tagSelected, this);
-        this.notelist.on('itemSelected', this.noteSelected, this);
-        this.taglist.on('queueSelected', function() {
-            return this.tagSelected('queue');
-        }, this);
-
-        // Load editor
-        this.editor = this.newEditor();
-
-        // Editor events
-        this.$('#editor').keypress(_.bind(this.invalidate, this));
-
-        // Apply resize once -- auto on window resize afterwards
-        this.fixLayout();
-
-        this.status('Idle');
-
-        return this;
-    },
-
-    // Factory method to create and setup an ACE editor
-    newEditor: function() {
-        var editor = ace.edit("editor");
-        editor.setShowPrintMargin(false);
-        editor.renderer.setShowGutter(false);
-        debugger;
-        editor.commands.addCommand({
-            name: 'Save',
-            bindKey: {
-                win: 'Ctrl-S',
-                mac: 'Command-J',
-            },
-            exec: _.bind(function (editor) {
-                return this.saveNote();
-            }, this),
-        });
-        return editor;
-    },
-
-    tagSelected: function(tagView) {
-        // Clean up temp data
-        this.pendingNote = null;
-
-        // Check for special tags
-        if (tagView == 'queue')
-        {
-            // Queue should retrieve notes with no tags yet defined
-            this.notes.fetch({
-                data: {
-                    'tags__isnull': 'True',  
-                },
-            });
-            return;
-        }
-    
-        // Load notes containing tag
-        this.notes.fetch({
-            data: {
-                'tags__id': tagView.model.id,  
-            },
-        });
-    },
-
-    noteSelected: function(noteView) {
-        this.loadNote(noteView.model);
-    },
-
-    // Editor data was modified
-    invalidate: function() {
-        // Update status
-        this.staterr('Unsaved changes');
-    },
-
-    closeNote: function() {
-        this.activeNote = null;
-    },
-
-    loadNote: function(note) {
-        // Cleanly close previous note
-        this.closeNote();
-
-        // Reset status
-        this.status('Idle');
-
-        // Set active
-        this.activeNote = note;
-
-        // Load note text
-        this.editor.getSession().setValue(note.get('text'));  
-    },
-
-    saveNote: function() {
-        if (!this.activeNote)
-            // Disregard this call, but its kind of concerning...
-            return
-
-        // Save editor buffer into backbone object
-        this.activeNote.save({
-            text: this.editor.getSession().getValue(),
-        }, {
-            success: _.bind(function(model, res) {
-                this.statok('Saved');
-            }, this),
-            error: _.bind(function(model, res) {
-                this.staterr(res.message);
-            }, this),
-        });
-    },
-
-    addNote: function() {
-        if (!this.pendingNote)
-        {
-            this.pendingNote = new app.models.Note;
-            this.notelist.addItem(this.pendingNote, {
-                top: true,
-            });
-        }
-    },
-
-    fixLayout: function() {
-        var height = window.innerHeight - $('#menu').height();
-        this.$('.fullscreen').css('height', height);
-        this.$('#editor').css('height', height);
-    },
-
-    status: function(message, type) {
-        var type = type || "info";
-        this.status_el.html($('<div/>').addClass('alert alert-' + type).html(message));
-    },
-
-    // Shortcuts
-    staterr: function(m) { return this.status(m, 'error'); },
-    statok: function(m) { return this.status(m, 'success'); },
-
-});
-
-
 var ListView = InflatingView.extend({
     tagName: 'div',
     itemViewClass: null,
@@ -264,6 +71,8 @@ var ListView = InflatingView.extend({
         itemView.on('selected', function(view) {
             this.trigger('itemSelected', view);
         }, this);
+
+        return itemView;
     },
 
     fillList: function() {
@@ -348,16 +157,16 @@ var TagListView = ListView.extend({
         ListView.prototype.render.call(this, arguments);
 
         // Add dedicated items
-        var queue = new ItemView;
-        queue.on('selected', function() { 
+        this.queue = new ItemView;
+        this.queue.on('selected', function() { 
             this.trigger('queueSelected');
         }, this);
-        this.$('.f-head').prepend(queue.render().$el.html('<a href="#">' + icon.list + 'Queue</a>'));
-        var trash = new ItemView;
-        trash.on('selected', function() { 
+        this.$('.f-head').prepend(this.queue.render().$el.html('<a href="#">' + icon.list + 'Queue</a>'));
+        this.trash = new ItemView;
+        this.trash.on('selected', function() { 
             this.trigger('trashSelected');
         }, this);
-        this.$('.f-tail').append(trash.render().$el.html('<a href="#">' + icon.trash + 'Trash</a>'));
+        this.$('.f-tail').append(this.trash.render().$el.html('<a href="#">' + icon.trash + 'Trash</a>'));
 
         return this;
     },
@@ -378,7 +187,7 @@ var NoteListView = ListView.extend({
 // Namespace
 app = window.app || {};
 app.views = {
-    ApplicationView: ApplicationView,
+    InflatingView: InflatingView,
     TagListView: TagListView,
     NoteListView: NoteListView,
     TagView: TagView,

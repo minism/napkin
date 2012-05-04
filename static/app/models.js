@@ -7,9 +7,9 @@ var BaseModel = Backbone.Model.extend({
 
 
 var BaseCollection = Backbone.Collection.extend({
-    parse: function(response) {
-        return response.objects;
-    },
+//    parse: function(response) {
+//        return response.objects;
+//    },
 });
 
 
@@ -17,15 +17,14 @@ var BaseCollection = Backbone.Collection.extend({
 var Note = BaseModel.extend({
     defaults: {
         name: "New note",
+        tags: [],
     },
 });
 
 
 var NoteCollection = BaseCollection.extend({
     model: Note,
-    url: function() {
-        return API_ROOT + 'note/';
-    },
+    url: API_ROOT + 'note/',
 });
 
 
@@ -38,9 +37,7 @@ var Tag = BaseModel.extend({
 
 var TagCollection = BaseCollection.extend({
     model: Tag,
-    url: function() {
-        return API_ROOT + 'tag/';
-    },
+    url: API_ROOT + 'tag/',
 });
 
 
